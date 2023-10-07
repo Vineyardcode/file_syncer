@@ -1,53 +1,51 @@
 import os
-import shutil
-import hashlib
-import time
 import argparse
+import time
+import hashlib
+from utils.FlashMessage import FlashMessage
+from utils.FileOps import FileOps
 
 class FolderSync:
-    def __init__(self, source_folder, replica_folder, sync_interval, log_file):
-        self.source_folder = source_folder
-        self.replica_folder = replica_folder
-        self.sync_interval = sync_interval
-        self.log_file = log_file
+    def __init__(self, **kwargs):
+        self.flash_message = FlashMessage(kwargs.get("log_file"))
+        self.file_ops = FileOps(self.flash_message)
+        self.__dict__.update(kwargs)
 
-    @staticmethod
-    def log(message, log_file):
-        with open(log_file, 'a') as f:
-            f.write(f"[{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}] {message}\n")
-        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}] {message}")
-
-    @staticmethod
-    def compare_and_sync(source_folder, replica_folder, log_file):
-        for root, _, files in os.walk(source_folder):
-            for file in files:
-                src_file = os.path.join(root, file)
-                dst_file = os.path.join(replica_folder, os.path.relpath(src_file, source_folder))
-
-                if not os.path.exists(dst_file) or not FolderSync.compare_files(src_file, dst_file):
-                    FolderSync.log(f"Copying {src_file} to {dst_file}", log_file)
-                    shutil.copy2(src_file, dst_file)
-
-        for root, _, files in os.walk(replica_folder):
-            for file in files:
-                dst_file = os.path.join(root, file)
-                src_file = os.path.join(source_folder, os.path.relpath(dst_file, replica_folder))
-
-                if not os.path.exists(src_file):
-                    FolderSync.log(f"Deleting {dst_file}", log_file)
-                    os.remove(dst_file)
-
-    @staticmethod
-    def compare_files(file1, file2):
-        with open(file1, 'rb') as f1, open(file2, 'rb') as f2:
-            return hashlib.md5(f1.read()).hexdigest() == hashlib.md5(f2.read()).hexdigest()
-
-    def sync_folders(self):
-        FolderSync.log("Starting synchronization...", self.log_file)
+    def run(self):
+        self.flash_message.log("Synchronization started...")
         while True:
-            FolderSync.compare_and_sync(self.source_folder, self.replica_folder, self.log_file)
-            FolderSync.log("Synchronization complete.", self.log_file)
+            self.synchronize_folders()
             time.sleep(self.sync_interval)
+
+    def calculate_md5(self, file_path):
+        hasher = hashlib.md5()
+        with open(file_path, 'rb') as f:
+            for chunk in iter(lambda: f.read(4096), b''):
+                hasher.update(chunk)
+        return hasher.hexdigest()
+
+    def synchronize_folders(self):
+        source_files = set(os.listdir(self.source_folder))
+        replica_files = set(os.listdir(self.replica_folder))
+
+        for file in source_files - replica_files:
+            src_file = os.path.join(self.source_folder, file)
+            dst_file = os.path.join(self.replica_folder, file)
+            self.file_ops.copy_file(src_file, dst_file)
+
+        for file in replica_files - source_files:
+            file_path = os.path.join(self.replica_folder, file)
+            self.file_ops.delete_file(file_path)
+
+        for file in source_files.intersection(replica_files):
+            src_file = os.path.join(self.source_folder, file)
+            dst_file = os.path.join(self.replica_folder, file)
+
+            src_md5 = self.calculate_md5(src_file)
+            dst_md5 = self.calculate_md5(dst_file)
+
+            if src_md5 != dst_md5:
+                self.file_ops.copy_file(src_file, dst_file)
 
 def main():
     parser = argparse.ArgumentParser(description="One-way folder synchronization")
@@ -56,10 +54,8 @@ def main():
     parser.add_argument("sync_interval", type=int, help="Synchronization interval in seconds")
     parser.add_argument("log_file", help="Path to the log file")
 
-    args = parser.parse_args()
-
-    folder_sync = FolderSync(args.source_folder, args.replica_folder, args.sync_interval, args.log_file)
-    folder_sync.sync_folders()
+    folder_sync = FolderSync(**vars(parser.parse_args()))
+    folder_sync.run()
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,37 @@
+[2023-10-07 05:29:51]
+[2023-10-07 05:42:43] action: Synchronization started..., info: [2023-10-07 05:47:13] action: Synchronization started..., info: [2023-10-07 05:51:35] action: Synchronization started..., info: ()[2023-10-07 05:52:14] action: Synchronization started..., info: ()[2023-10-07 05:52:23] action: Synchronization started..., info: ()Synchronization started at 2023-10-07 05:54:12
+Synchronization started at 2023-10-07 05:54:22
+File 'oooooooooo' copied from 'source' to 'replica' at 2023-10-07 05:54:22
+Synchronization started at 2023-10-07 05:54:32
+File 'oooooooooo' removed from 'replica' at 2023-10-07 05:54:32
+Synchronization started at 2023-10-07 05:54:42
+Synchronization started at 2023-10-07 05:54:52
+Synchronization started at 2023-10-07 05:55:02
+Synchronization started at 2023-10-07 05:55:12
+File 'lùjhbjùhl' copied from 'source' to 'replica' at 2023-10-07 05:55:12
+Synchronization started at 2023-10-07 05:55:22
+Synchronization started at 2023-10-07 05:55:32
+Synchronization started at 2023-10-07 05:55:42
+Synchronization started at 2023-10-07 05:55:52
+Synchronization started at 2023-10-07 05:56:02
+Synchronization started at 2023-10-07 05:56:12
+Synchronization started at 2023-10-07 05:56:22
+Synchronization started at 2023-10-07 05:56:32
+Synchronization started at 2023-10-07 05:56:42
+Synchronization started at 2023-10-07 05:56:52
+Synchronization started at 2023-10-07 05:57:02
+Synchronization started at 2023-10-07 05:57:12
+Synchronization started at 2023-10-07 05:57:22
+Synchronization started at 2023-10-07 05:57:32
+Synchronization started at 2023-10-07 05:57:42
+Synchronization started at 2023-10-07 05:57:52
+Synchronization started at 2023-10-07 05:57:53
+Synchronization started at 2023-10-07 05:58:03
+File 'lùjhbjùhl' copied from 'source' to 'replica' at 2023-10-07 05:58:03
+Synchronization started at 2023-10-07 05:58:13
+Synchronization started at 2023-10-07 05:58:23
+Synchronization started at 2023-10-07 05:58:33
+Synchronization started at 2023-10-07 05:58:43
+[2023-10-07 14:13:29] action: Synchronization started..., info: ()[2023-10-07 14:19:51] action: Synchronization started..., info: 
+[2023-10-07 14:23:20] Action: Synchronization started..., Info: 
+[2023-10-07 14:29:15] Action: Synchronization started..., Info: 
